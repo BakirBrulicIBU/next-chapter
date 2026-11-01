@@ -1,12 +1,15 @@
 # Next Chapter
 
 Next Chapter is a personal reading list where users save books they want to read, are reading, or have finished. 
+<br>
 Each book can have a rating, a short note and a cover photo taken from the camera or gallery.
 
 ## Run the project
 
+```bash
 npm install
 npx expo start
+```
 
 ## Features
 
