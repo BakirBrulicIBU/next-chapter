@@ -10,7 +10,7 @@ npx expo start
 
 ## Features
 
-- [ ] List of books (mock data)
+- [X] List of books (mock data)
 - [ ] Status filter
 - [ ] Book details screen
 - [ ] Add and edit a book
