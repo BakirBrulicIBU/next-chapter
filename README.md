@@ -1,6 +1,6 @@
 # Next Chapter
 
-Next Chapter is a personal reading list where users save books they want to read, are reading, or have finished. 
+Next Chapter is a personal reading list where users save books they want to read, are reading, or have finished.
 <br>
 Each book can have a rating, a short note and a cover photo taken from the camera or gallery.
 
@@ -13,7 +13,7 @@ npx expo start
 
 ## Features
 
-- [X] List of books (mock data)
+- [x] List of books (mock data)
 - [ ] Status filter
 - [ ] Book details screen
 - [ ] Add and edit a book
@@ -22,3 +22,10 @@ npx expo start
 - [ ] Tabs for Books and Profile
 - [ ] Sort order
 - [ ] Extras: search, reading statistics
+- [x] Light and dark theme, layout for phones and tablets
+
+## Screenshots
+
+| Light mode                                 | Dark mode                                |
+| ------------------------------------------ | ---------------------------------------- |
+| ![Home in light mode](docs/home-light.jpg) | ![Home in dark mode](docs/home-dark.jpg) |
