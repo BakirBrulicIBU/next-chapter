@@ -1,4 +1,12 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
 
 import Stars from "@/components/Stars";
 import StatusPill from "@/components/StatusPill";
@@ -8,9 +16,10 @@ import type { Book } from "@/types";
 
 type BookCardProps = {
   book: Book;
+  style?: StyleProp<ViewStyle>;
 };
 
-export default function BookCard({ book }: BookCardProps) {
+export default function BookCard({ book, style }: BookCardProps) {
   const theme = useTheme();
 
   return (
@@ -20,6 +29,7 @@ export default function BookCard({ book }: BookCardProps) {
         styles.card,
         { backgroundColor: theme.card, borderColor: theme.border },
         pressed && styles.pressed,
+        style,
       ]}
     >
       <View>
