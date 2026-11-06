@@ -1,9 +1,9 @@
-import { ScrollView, StyleSheet } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ScrollView, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import BookCard from '@/components/BookCard';
-import { Spacing } from '@/constants/theme';
-import { books } from '@/data/books';
+import BookCard from "@/components/BookCard";
+import { Spacing } from "@/constants/theme";
+import { books } from "@/data/books";
 
 export default function Index() {
   const insets = useSafeAreaInsets();
