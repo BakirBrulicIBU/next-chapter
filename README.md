@@ -14,15 +14,16 @@ npx expo start
 ## Features
 
 - [x] List of books (mock data)
-- [ ] Status filter
+- [x] Status filter
 - [ ] Book details screen
 - [ ] Add and edit a book
 - [ ] Cover photo from the camera or gallery
 - [ ] Login
 - [ ] Tabs for Books and Profile
-- [ ] Sort order
+- [x] Sort order
 - [ ] Extras: search, reading statistics
 - [x] Light and dark theme, layout for phones and tablets
+- [x] Loading and error states, pull to refresh, long press to delete
 
 ## Screenshots
 
