@@ -13,16 +13,28 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import BookCard from "@/components/BookCard";
 import EmptyState from "@/components/EmptyState";
+import FilterChip from "@/components/FilterChip";
 import SummaryRow from "@/components/SummaryRow";
 import { FontSize, Spacing } from "@/constants/theme";
 import { fetchBooks } from "@/data/api";
 import { useTheme } from "@/hooks/use-theme";
-import type { Book } from "@/types";
+import { statusLabels, type Book, type BookStatus } from "@/types";
 
 const PADDING = Spacing.xl;
 const GAP = Spacing.md;
 
 type Status = "loading" | "error" | "ready";
+type Filter = "all" | BookStatus;
+type Sort = "none" | "newest" | "rating";
+
+const filters: Filter[] = ["all", "to-read", "reading", "finished"];
+
+const emptyTitles: Record<Filter, string> = {
+  all: "No books yet",
+  "to-read": "No books to read",
+  reading: "No books in progress",
+  finished: "No finished books",
+};
 
 export default function Index() {
   const insets = useSafeAreaInsets();
@@ -33,6 +45,8 @@ export default function Index() {
   const [status, setStatus] = useState<Status>("loading");
   const [attempt, setAttempt] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
+  const [filter, setFilter] = useState<Filter>("all");
+  const [sort, setSort] = useState<Sort>("none");
 
   useEffect(() => {
     let ignore = false;
@@ -81,6 +95,16 @@ export default function Index() {
     (width - 2 * PADDING - (columns - 1) * GAP) / columns,
   );
 
+  const visible =
+    filter === "all" ? books : books.filter((b) => b.status === filter);
+
+  const sorted =
+    sort === "newest"
+      ? [...visible].sort((a, b) => b.addedAt.localeCompare(a.addedAt))
+      : sort === "rating"
+        ? [...visible].sort((a, b) => b.rating - a.rating)
+        : visible;
+
   if (status === "loading") {
     return (
       <View style={styles.center}>
@@ -103,7 +127,7 @@ export default function Index() {
   return (
     <FlatList
       key={columns}
-      data={books}
+      data={sorted}
       keyExtractor={(book) => book.id}
       numColumns={columns}
       columnWrapperStyle={columns > 1 ? { gap: GAP } : undefined}
@@ -114,12 +138,42 @@ export default function Index() {
           onLongPress={() => confirmDelete(item)}
         />
       )}
-      ListHeaderComponent={<SummaryRow books={books} />}
+      ListHeaderComponent={
+        <View style={styles.header}>
+          <SummaryRow books={books} />
+          <View style={styles.chips}>
+            {filters.map((f) => (
+              <FilterChip
+                key={f}
+                label={f === "all" ? "All" : statusLabels[f]}
+                selected={filter === f}
+                onPress={() => setFilter(f)}
+              />
+            ))}
+          </View>
+          <View style={styles.chips}>
+            <FilterChip
+              label="Newest"
+              selected={sort === "newest"}
+              onPress={() => setSort(sort === "newest" ? "none" : "newest")}
+            />
+            <FilterChip
+              label="Top rated"
+              selected={sort === "rating"}
+              onPress={() => setSort(sort === "rating" ? "none" : "rating")}
+            />
+          </View>
+        </View>
+      }
       ListHeaderComponentStyle={{ marginBottom: Spacing.xl }}
       ListEmptyComponent={
         <EmptyState
-          title="No books yet"
-          message="Your books will appear here."
+          title={emptyTitles[filter]}
+          message={
+            filter === "all"
+              ? "Your books will appear here."
+              : "Choose another status."
+          }
         />
       }
       ItemSeparatorComponent={() => <View style={{ height: GAP }} />}
@@ -143,4 +197,6 @@ const styles = StyleSheet.create({
     padding: PADDING,
   },
   error: { fontSize: FontSize.title, fontWeight: "600" },
+  header: { gap: Spacing.lg },
+  chips: { flexDirection: "row", flexWrap: "wrap", gap: Spacing.sm },
 });
