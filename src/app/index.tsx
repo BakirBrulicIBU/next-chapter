@@ -2,6 +2,7 @@ import { FlatList, useWindowDimensions, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import BookCard from "@/components/BookCard";
+import EmptyState from "@/components/EmptyState";
 import SummaryRow from "@/components/SummaryRow";
 import { Spacing } from "@/constants/theme";
 import { books } from "@/data/books";
@@ -30,8 +31,15 @@ export default function Index() {
       )}
       ListHeaderComponent={<SummaryRow books={books} />}
       ListHeaderComponentStyle={{ marginBottom: Spacing.xl }}
+      ListEmptyComponent={
+        <EmptyState
+          title="No books yet"
+          message="Your books will appear here."
+        />
+      }
       ItemSeparatorComponent={() => <View style={{ height: GAP }} />}
       contentContainerStyle={{
+        flexGrow: 1,
         padding: PADDING,
         paddingBottom: PADDING + insets.bottom,
       }}
