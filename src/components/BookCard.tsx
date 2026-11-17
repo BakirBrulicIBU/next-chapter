@@ -1,31 +1,80 @@
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
+
+import Stars from "@/components/Stars";
+import StatusPill from "@/components/StatusPill";
+import { FontSize, Radius, Spacing } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
 import { statusLabels, type Book } from "@/types";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 type BookCardProps = {
   book: Book;
+  style?: StyleProp<ViewStyle>;
+  onLongPress?: () => void;
 };
 
-export default function BookCard({ book }: BookCardProps) {
+export default function BookCard({ book, style, onLongPress }: BookCardProps) {
+  const theme = useTheme();
+
   return (
     <Pressable
       onPress={() => console.log("Open", book.id)}
-      style={({ pressed }) => [styles.card, pressed && styles.pressed]}
+      onLongPress={onLongPress}
+      accessibilityRole="button"
+      accessibilityLabel={`${book.title} by ${book.author}, ${statusLabels[book.status]}, ${book.rating} of 5 stars`}
+      accessibilityHint="Long press to delete"
+      android_ripple={{ color: theme.border }}
+      style={({ pressed }) => [
+        styles.card,
+        { backgroundColor: theme.card, borderColor: theme.border },
+        pressed && styles.pressed,
+        style,
+      ]}
     >
-      <Image source={{ uri: book.coverUrl }} style={styles.image} />
+      <View>
+        <Image source={{ uri: book.coverUrl }} style={styles.photo} />
+        <StatusPill status={book.status} style={styles.badge} />
+      </View>
+
       <View style={styles.info}>
-        <Text style={styles.title}>{book.title}</Text>
-        <Text>
-          {book.author} · {statusLabels[book.status]} · {book.rating}/5
-        </Text>
+        <View style={styles.text}>
+          <Text style={[styles.title, { color: theme.text }]} numberOfLines={2}>
+            {book.title}
+          </Text>
+          <Text
+            style={[styles.author, { color: theme.muted }]}
+            numberOfLines={1}
+          >
+            {book.author}
+          </Text>
+          <Stars rating={book.rating} />
+        </View>
+        <Text style={[styles.chevron, { color: theme.muted }]}>›</Text>
       </View>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  card: { borderRadius: 12, overflow: "hidden", backgroundColor: "#FFFFFF" },
-  pressed: { opacity: 0.6 },
-  image: { width: "100%", height: 160 },
-  info: { padding: 12, gap: 4 },
-  title: { fontSize: 18, fontWeight: "bold" },
+  card: { borderRadius: Radius.md, borderWidth: 1, overflow: "hidden" },
+  pressed: { opacity: 0.7 },
+  photo: { width: "100%", aspectRatio: 16 / 9 },
+  badge: { position: "absolute", top: Spacing.sm, right: Spacing.sm },
+  info: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.lg,
+    gap: Spacing.md,
+  },
+  text: { flex: 1, gap: Spacing.xs },
+  title: { fontSize: FontSize.title, fontWeight: "700" },
+  author: { fontSize: FontSize.body },
+  chevron: { fontSize: FontSize.hero },
 });
