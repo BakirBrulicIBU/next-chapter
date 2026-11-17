@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Button,
   FlatList,
   StyleSheet,
@@ -64,6 +65,17 @@ export default function Index() {
     }
   }
 
+  function confirmDelete(book: Book) {
+    Alert.alert("Delete book?", `"${book.title}" will be removed.`, [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: () => setBooks((list) => list.filter((b) => b.id !== book.id)),
+      },
+    ]);
+  }
+
   const columns = width >= 900 ? 3 : width >= 600 ? 2 : 1;
   const cardWidth = Math.floor(
     (width - 2 * PADDING - (columns - 1) * GAP) / columns,
@@ -96,7 +108,11 @@ export default function Index() {
       numColumns={columns}
       columnWrapperStyle={columns > 1 ? { gap: GAP } : undefined}
       renderItem={({ item }) => (
-        <BookCard book={item} style={{ width: cardWidth }} />
+        <BookCard
+          book={item}
+          style={{ width: cardWidth }}
+          onLongPress={() => confirmDelete(item)}
+        />
       )}
       ListHeaderComponent={<SummaryRow books={books} />}
       ListHeaderComponentStyle={{ marginBottom: Spacing.xl }}

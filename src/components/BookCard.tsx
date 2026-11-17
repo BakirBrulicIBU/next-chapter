@@ -12,19 +12,25 @@ import Stars from "@/components/Stars";
 import StatusPill from "@/components/StatusPill";
 import { FontSize, Radius, Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
-import type { Book } from "@/types";
+import { statusLabels, type Book } from "@/types";
 
 type BookCardProps = {
   book: Book;
   style?: StyleProp<ViewStyle>;
+  onLongPress?: () => void;
 };
 
-export default function BookCard({ book, style }: BookCardProps) {
+export default function BookCard({ book, style, onLongPress }: BookCardProps) {
   const theme = useTheme();
 
   return (
     <Pressable
       onPress={() => console.log("Open", book.id)}
+      onLongPress={onLongPress}
+      accessibilityRole="button"
+      accessibilityLabel={`${book.title} by ${book.author}, ${statusLabels[book.status]}, ${book.rating} of 5 stars`}
+      accessibilityHint="Long press to delete"
+      android_ripple={{ color: theme.border }}
       style={({ pressed }) => [
         styles.card,
         { backgroundColor: theme.card, borderColor: theme.border },
