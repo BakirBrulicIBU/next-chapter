@@ -31,6 +31,7 @@ export default function Index() {
   const [books, setBooks] = useState<Book[]>([]);
   const [status, setStatus] = useState<Status>("loading");
   const [attempt, setAttempt] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     let ignore = false;
@@ -52,6 +53,15 @@ export default function Index() {
   function retry() {
     setStatus("loading");
     setAttempt((a) => a + 1);
+  }
+
+  async function refresh() {
+    setRefreshing(true);
+    try {
+      setBooks(await fetchBooks());
+    } finally {
+      setRefreshing(false);
+    }
   }
 
   const columns = width >= 900 ? 3 : width >= 600 ? 2 : 1;
@@ -97,6 +107,8 @@ export default function Index() {
         />
       }
       ItemSeparatorComponent={() => <View style={{ height: GAP }} />}
+      refreshing={refreshing}
+      onRefresh={refresh}
       contentContainerStyle={{
         flexGrow: 1,
         padding: PADDING,
