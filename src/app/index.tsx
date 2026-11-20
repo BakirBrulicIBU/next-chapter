@@ -1,3 +1,12 @@
+import BookCard from "@/components/BookCard";
+import EmptyState from "@/components/EmptyState";
+import FilterChip from "@/components/FilterChip";
+import SummaryRow from "@/components/SummaryRow";
+import { FontSize, Spacing } from "@/constants/theme";
+import { fetchBooks } from "@/data/api";
+import { useTheme } from "@/hooks/use-theme";
+import { statusLabels, type Book, type BookStatus } from "@/types";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -10,15 +19,6 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-import BookCard from "@/components/BookCard";
-import EmptyState from "@/components/EmptyState";
-import FilterChip from "@/components/FilterChip";
-import SummaryRow from "@/components/SummaryRow";
-import { FontSize, Spacing } from "@/constants/theme";
-import { fetchBooks } from "@/data/api";
-import { useTheme } from "@/hooks/use-theme";
-import { statusLabels, type Book, type BookStatus } from "@/types";
 
 const PADDING = Spacing.xl;
 const GAP = Spacing.md;
@@ -40,6 +40,7 @@ export default function Index() {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const theme = useTheme();
+  const router = useRouter();
 
   const [books, setBooks] = useState<Book[]>([]);
   const [status, setStatus] = useState<Status>("loading");
@@ -135,6 +136,7 @@ export default function Index() {
         <BookCard
           book={item}
           style={{ width: cardWidth }}
+          onPress={() => router.push(`/book/${item.id}`)}
           onLongPress={() => confirmDelete(item)}
         />
       )}
