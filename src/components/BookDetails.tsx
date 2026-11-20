@@ -6,26 +6,7 @@ import StatusPill from "@/components/StatusPill";
 import { FontSize, Radius, Spacing } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import type { Book } from "@/types";
-
-const MONTHS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-function formatDate(iso: string) {
-  const [year, month, day] = iso.split("-");
-  return `${Number(day)} ${MONTHS[Number(month) - 1]} ${year}`;
-}
+import { formatDate } from "@/utils/format";
 
 type BookDetailsProps = {
   book: Book;
@@ -81,7 +62,6 @@ type RowProps = {
   divider?: boolean;
 };
 
-// One "label ...... value" line
 function Row({ label, children, divider }: RowProps) {
   const theme = useTheme();
 
