@@ -1,5 +1,12 @@
-import { Stack, useLocalSearchParams } from "expo-router";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import EmptyState from "@/components/EmptyState";
@@ -13,7 +20,16 @@ export default function BookDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const theme = useTheme();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const book = getBook(id);
+
+  function goBack() {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace("/");
+    }
+  }
 
   if (!book) {
     return (
@@ -62,6 +78,20 @@ export default function BookDetailsScreen() {
           {book.note ?? "No notes for this book."}
         </Text>
       </View>
+
+      <Pressable
+        onPress={goBack}
+        accessibilityRole="button"
+        style={({ pressed }) => [
+          styles.button,
+          { backgroundColor: theme.primary },
+          pressed && { opacity: 0.7 },
+        ]}
+      >
+        <Text style={[styles.buttonText, { color: theme.onPrimary }]}>
+          Back to the list
+        </Text>
+      </Pressable>
     </ScrollView>
   );
 }
@@ -84,4 +114,10 @@ const styles = StyleSheet.create({
   notes: { gap: Spacing.xs },
   notesLabel: { fontSize: FontSize.title, fontWeight: "700" },
   notesText: { fontSize: FontSize.body, lineHeight: 22 },
+  button: {
+    alignItems: "center",
+    paddingVertical: Spacing.md,
+    borderRadius: Radius.pill,
+  },
+  buttonText: { fontSize: FontSize.body, fontWeight: "700" },
 });
