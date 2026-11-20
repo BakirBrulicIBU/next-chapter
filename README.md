@@ -15,7 +15,7 @@ npx expo start
 
 - [x] List of books (mock data)
 - [x] Status filter
-- [ ] Book details screen
+- [x] Book details screen
 - [ ] Add and edit a book
 - [ ] Cover photo from the camera or gallery
 - [ ] Login
