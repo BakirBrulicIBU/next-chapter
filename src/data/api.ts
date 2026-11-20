@@ -10,3 +10,7 @@ export async function fetchBooks(
   if (options.fail) throw new Error("Could not load books");
   return books;
 }
+
+export function getBook(id: string): Book | undefined {
+  return books.find((book) => book.id === id);
+}
